@@ -25,15 +25,15 @@ const goblin = {
 
 const levelOne = {
   level: 1,
-  targetPoints: 5
+  expTarget: 5
 };
 const levelTwo = {
   level: 2,
-  targetPoints: 10
+  expTarget: 10
 };
 const levelThree = {
   level: 3,
-  targetPoints: 15
+  expTarget: 15
 };
 
 const levelUpPoints = [levelOne, levelTwo, levelThree];

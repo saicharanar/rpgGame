@@ -3,10 +3,6 @@ const player = lib.player;
 const levels = lib.levels;
 const levelUpPoints = lib.levelUpPoints;
 
-const doesPlayerHaveEnoughPointsToLevelUp = function (level, player) {
-  return level.targetPoints === player.exp;
-};
-
 const isPlayerReadyForLevelUp = function (player) {
   return levelUpPoints.some(function (level) {
     return level.targetPoints === player.exp;
@@ -20,13 +16,9 @@ const levelUp = function (player) {
 };
 
 const upgradeStats = function (player, monster) {
-  if (player.exp >= player.expForNextLevel) {
-    player.level++;
-    player.hp += 5;
-    player.atk += 5;
-    player.def += 5;
-    player.expForNextLevel *= 2;
-  }
+  player.hp += 5;
+  player.atk += 5;
+  player.def += 5;
 
   return player;
 };
@@ -35,9 +27,7 @@ const accumulateExp = function (player, monster) {
   if (monster.hp <= 0) {
     player.exp += monster.exp;
   }
-
   if (isPlayerReadyForLevelUp(player)) {
-    // console.log(player.exp);
     player = levelUp(player);
   }
   return player;
