@@ -1,7 +1,7 @@
 //player data
 const player = {
   name: 'cherry',
-  level: 1,
+  level: 0,
   hp: 10,
   atk: 5,
   def: 5,
