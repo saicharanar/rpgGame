@@ -27,6 +27,7 @@ const accumulateExp = function (player, monster) {
   if (monster.hp <= 0) {
     player.exp += monster.exp;
   }
+
   if (isPlayerReadyForLevelUp(player)) {
     player = levelUp(player);
   }
