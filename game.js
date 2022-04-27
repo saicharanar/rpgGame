@@ -3,9 +3,26 @@ const player = lib.player;
 const levels = lib.levels;
 const levelUpPoints = lib.levelUpPoints;
 
-const isPlayerReadyForLevelUp = function (player) {
+const getLevelStatToBeIncreased = function (level, playerPoints) {
+  return level.expTarget === playerPoints;
+}
+
+const upgradeStats = function (player) {
+  const levelPosition = levelUpPoints.find(function (level) {
+    return getLevelStatToBeIncreased(level, player.exp);
+  })
+  const statToBeIncrease = levelPosition.statToBeIncrease;
+
+  player.hp += statToBeIncrease;
+  player.atk += statToBeIncrease;
+  player.def += statToBeIncrease;
+
+  return player;
+};
+
+const canPlayerLevelUp = function (player) {
   return levelUpPoints.some(function (level) {
-    return level.targetPoints === player.exp;
+    return level.expTarget === player.exp;
   });
 };
 
@@ -15,20 +32,12 @@ const levelUp = function (player) {
   return player;
 };
 
-const upgradeStats = function (player, monster) {
-  player.hp += 5;
-  player.atk += 5;
-  player.def += 5;
-
-  return player;
-};
-
 const accumulateExp = function (player, monster) {
   if (monster.hp <= 0) {
     player.exp += monster.exp;
   }
 
-  if (isPlayerReadyForLevelUp(player)) {
+  if (canPlayerLevelUp(player)) {
     player = levelUp(player);
   }
   return player;
@@ -36,35 +45,32 @@ const accumulateExp = function (player, monster) {
 
 const getMonsterDamage = function (monster, player) {
   let monsterDamage = monster.atk - player.def;
-  return monsterDamage > 0 ? monsterDamage : 0;
+  return Math.max(monsterDamage, 0);
 };
 
 const takeDamageOfMonster = function (monster, player) {
   const monsterDamage = getMonsterDamage(monster, player);
   player.hp -= monsterDamage;
-  player.hp = player.hp > 0 ? player.hp : 0;
+  player.hp = Math.max(player.hp, 0);
 
   return player;
 };
 
 const takeDamageOfPlayer = function (player, monster) {
   monster.hp -= player.atk;
-  monster.hp = monster.hp > 0 ? monster.hp : 0;
+  monster.hp = Math.max(monster.hp, 0);
 
   return monster;
 };
 
-const attackPlace = function (player, level) {
-  let monster = level.monster;
+const attackMonster = function (player, monster) {
   const monsterDamage = getMonsterDamage(monster, player);
-
   monster = takeDamageOfPlayer(player, monster);
   player = takeDamageOfMonster(monster, player);
 
   return {
     player: player.name,
     monster: monster.name,
-    place: level.name,
     damageDealt: player.atk,
     damageTaken: monsterDamage,
     playerLevel: player.level,
@@ -74,9 +80,10 @@ const attackPlace = function (player, level) {
 };
 
 const attack = function (player, level) {
-  const levelReport = [];
+  const levelReport = ['Place : ' + level.name];
+
   while (player.hp > 0 && level.monster.hp > 0) {
-    levelReport.push(attackPlace(player, level));
+    levelReport.push(attackMonster(player, level.monster));
     player = accumulateExp(player, level.monster);
   }
 
