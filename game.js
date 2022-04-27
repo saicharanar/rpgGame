@@ -89,12 +89,12 @@ const attack = function (player, level) {
 };
 
 const startGame = function (player, levels) {
-  const levelsReport = [];
+  const gameReport = [];
   levels.forEach(function (level) {
-    levelsReport.push(attack(player, level));
+    gameReport.push(attack(player, level));
   })
 
-  return levelsReport;
+  return gameReport;
 };
 
 console.log(startGame(player, levels));
