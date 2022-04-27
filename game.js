@@ -3,16 +3,12 @@ const player = lib.player;
 const levels = lib.levels;
 const levelUpPoints = lib.levelUpPoints;
 
-const getLevelStatToBeIncreased = function (level, playerPoints) {
-  return level.expTarget === playerPoints;
-}
-
 const upgradeStats = function (player) {
   const levelPosition = levelUpPoints.find(function (level) {
-    return getLevelStatToBeIncreased(level, player.exp);
-  })
-  const statToBeIncrease = levelPosition.statToBeIncrease;
+    return level.expTarget <= player.exp;
+  });
 
+  const statToBeIncrease = levelPosition.statToBeIncrease;
   player.hp += statToBeIncrease;
   player.atk += statToBeIncrease;
   player.def += statToBeIncrease;
@@ -55,7 +51,6 @@ const takeDamageOfMonster = function (monster, player) {
   const monsterDamage = getMonsterDamage(monster, player);
   player.hp -= monsterDamage;
   player.hp = Math.max(player.hp, 0);
-
   return player;
 };
 

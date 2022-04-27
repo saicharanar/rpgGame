@@ -19,7 +19,7 @@ const slime = {
 const goblin = {
   name: 'goblin',
   hp: 15,
-  atk: 6,
+  atk: 11,
   exp: 10
 }
 
