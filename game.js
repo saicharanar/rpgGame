@@ -21,9 +21,12 @@ const upgradeStats = function (player) {
 };
 
 const canPlayerLevelUp = function (player) {
-  return levelUpPoints.some(function (level) {
-    return level.expTarget === player.exp;
+  const nextLevel = player.level + 1;
+  const nextLevelInfo = levelUpPoints.find(function (level) {
+    return level.level === nextLevel;
   });
+
+  return player.exp >= nextLevelInfo.expTarget;
 };
 
 const levelUp = function (player) {
